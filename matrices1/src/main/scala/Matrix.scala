@@ -10,31 +10,54 @@ object Matrix {
 }
 
 
-case class Matrix[T](elems: Row[T]*)(implicit fractional: Fractional[T]) {
+case class Matrix[T](e: Row[T]*)(implicit fractional: Fractional[T]) {
   import fractional._
 
-  val dim = (elems.length, elems(0).length)
+  val elems = e.toArray
 
-//  def det: T = {
-//    var result = zero
-//
-//    for (i <- 0 until dim._1) {
-//      val normrow = this(i) / this(i,i)
-//    }
-//
-//    result
-//  }
+  val dim = elems.length
+
+  def this(e: Array[Row[T]])(implicit fractional: Fractional[T], tag: ClassTag[T]) =
+    this(e: _*)
+
+  def det: T = {
+    val copy = Matrix(elems.clone: _*)
+
+    def getClosestNonZeroRowIndex(i: Int): Int = {
+      var j = i
+      while (j < dim && copy(j,i) == 0) j += 1
+      if (j == dim) -1 else j
+    }
+
+    var result = one
+    var mult = one
+    for (i <- 0 until dim) {
+      if (copy(i,i) == zero) {
+        val k = getClosestNonZeroRowIndex(i)
+        if (k < 0) return zero
+        else {
+          swap(i,k)
+          mult = -mult
+        }
+      }
+      result *= copy(i,i)
+      val normrow = copy(i) / copy(i,i)
+      for (j <- i+1 until dim) {
+        copy.elems(j) = copy.elems(j) - (normrow * copy.elems(j)(i))
+      }
+    }
+
+    result
+  }
 
   def apply(i: Int): Row[T] = elems(i)
 
   def apply(i: Int, j: Int): T = elems(i)(j)
 
-  def swap(rows: (Int, Int)): Matrix[T] = {
-    var newelems: mutable.WrappedArray[Row[T]] = elems.toArray.clone
-    val tmprow = elems(rows._1)
-    newelems(rows._1) = newelems(rows._2)
-    newelems(rows._2) = tmprow
-    Matrix(newelems: _*)
+  def swap(i: Int, j: Int): Unit = {
+    val tmprow = elems(i)
+    elems(i) = elems(j)
+    elems(j) = tmprow
   }
 
   override def toString: String = {
