@@ -12,7 +12,7 @@ trait Field[T] extends Ring[T]{
   def |/|(a:T,b: =>T):T
 }
 
-abstract case class Vectors[G](elem:G)(implicit vg:Group[G]){
+case class Vectors[G](elem:G)(implicit vg:Group[G]){
   def :*:[F](b:F)(implicit ff:Field[F]) = new :*:(b,elem)
 }
 

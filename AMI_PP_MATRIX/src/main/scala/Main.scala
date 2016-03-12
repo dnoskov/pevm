@@ -15,7 +15,7 @@ object Main extends App {
     def |*|(a: Double,b: =>Double): Double = a * b
     def |/|(a: Double,b: =>Double): Double = a / b
   }
-  val v = new Vectors(5){}
+  val v = new Vectors(5)
   val x = 6.0 :*: v
   x match {
     case a :*: b => println(a)
