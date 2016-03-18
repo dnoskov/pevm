@@ -74,23 +74,23 @@ case class Matrix[T](e: Row[T]*)(implicit fractional: Fractional[T], tag: ClassT
   }
 
   def isSymmetric: Boolean = {
-    for (i <- 0 until dim-1; j <- i+1 until dim if (this(i,j) != this(j,i))) return false
-    return true
+    for (i <- 0 until dim-1; j <- i+1 until dim if this(i,j) != this(j,i)) false
+    true
   }
 
   def isUT: Boolean = {
-    for (i <- 1 until dim; j <- i-1 until dim-1 if (this(i,j) != zero)) return false
-    return true
+    for (i <- 1 until dim; j <- 0 until i if this(i,j) != zero) false
+    true
   }
 
   def isLT: Boolean = {
-    for (i <- 0 until dim-1; j <- i+1 until dim if (this(i,j) != zero)) return false
-    return true
+    for (i <- 0 until dim-1; j <- i+1 until dim if this(i,j) != zero) false
+    true
   }
 
   def ==(m: Matrix[T]): Boolean = {
-    for (i <- 0 until dim; j <- 0 until dim if (this(i,j) != m(i,j))) return false
-    return true
+    for (i <- 0 until dim; j <- 0 until dim if this(i,j) != m(i,j)) false
+    true
   }
 
   def row(i: Int): Array[T] = rows(i).e.toArray
