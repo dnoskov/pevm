@@ -1,4 +1,4 @@
- abstract class RBT[A](implicit ordering:Ordering[A]) {
+abstract class RBT[A](implicit ordering:Ordering[A]) {
   import ordering._
   import RBT._
   import Color._
@@ -75,6 +75,11 @@
       case Full(_, a, l, r) => aux(l, a :: aux(r, acc))
     }
     aux(this, List.empty[A])
+  }
+
+  override def toString: String = this match {
+    case e: Empty[A] => "nil"
+    case f: Full[A] => f.value.toString
   }
 
 }
