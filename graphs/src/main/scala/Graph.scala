@@ -31,9 +31,9 @@ class Graph(v: ArrayBuffer[ArrayBuffer[Int]]) {
 
     def dfs(u: Int): Unit = {
       greys += u
-      result += f(u)
-      for (w <- v(u) if !(greys contains w)) dfs(w)
 
+      for (w <- v(u) if !(greys contains w)) dfs(w)
+      result += f(u)
     }
 
     dfs(root)
