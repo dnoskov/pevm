@@ -1,6 +1,6 @@
 /**
   * Created by noname on 10.03.16.
   */
-object Main {
+object Main extends App {
 
 }
