@@ -1,8 +1,9 @@
-object Matrix {
-  import AlgebraicStructures._
+import algebra.Structures._
+import algebra.Instances._
 
-  implicit val doubleMatrixRing = new Group[Matrix[Double]] {
-    def |+|(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
+object Matrix {
+  implicit val doubleMatrixRing = new Ring[Matrix[Double]] {
+    def append(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
       val n = a().length
       val na = new Array[Array[Double]](n)
       for (i <- 0 until n) {
@@ -11,16 +12,16 @@ object Matrix {
       }
       Matrix(na)
     }
-    def |-|(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
+    def subtract(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
       val n = a().length
       val na = new Array[Array[Double]](n)
       for (i <- 0 until n) {
         na(i) = new Array[Double](n)
-        for (j <- 0 until n) na(i)(j) = a(i)(j) + b(i)(j)
+        for (j <- 0 until n) na(i)(j) = a(i)(j) - b(i)(j)
       }
       Matrix(na)
     }
-    def |*|(a: Matrix[Double], b: Matrix[Double]): Matrix[Double] = {
+    def multiply(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
       val na = new Array[Array[Double]](a().length)
       for (i <- 0 until a().length) {
         na(i) = new Array[Double](b().length)
@@ -50,11 +51,12 @@ object Matrix {
     Matrix(na)
   }
   def isId(a: Matrix[Double]) = {
-     (doubleMatrixRing |-| id(a().length)) == zero(a().length)
+     (a |-| id(a().length)) == zero(a().length)
    }
 }
 
 case class Matrix[T](elems: Array[Array[T]])(implicit f: Field[T], m: Manifest[Array[Array[Double]]]) {
   def apply() = elems
   def apply(i: Int) = elems(i)
+  override def toString() = elems.map(x => x.mkString("(", ", ", ")")).mkString("\n")
 }
