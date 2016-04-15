@@ -28,10 +28,10 @@ object Matrix {
     def multiply(a: Matrix[T], b: => Matrix[T]): Matrix[T] = {
       val n = a().length
       val na = Array.fill(n)(Array.fill(n)(F.id))
-      for (i <- 0 until a().length) {
-        for (j <- 0 until b().length)
-          for (k <- 0 until a(0).length)
-            na(i)(j) = na(i)(j) |+| a(i)(k) |+| b(k)(j)
+      for (i <- 0 until n) {
+        for (j <- 0 until b(0).length)
+          for (k <- 0 until b().length)
+            na(i)(j) = na(i)(j) |+| (a(i)(k) |*| b(k)(j))
       }
       Matrix(na)
     }
