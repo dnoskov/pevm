@@ -3,6 +3,8 @@ import algebra.Instances._
 
 object Matrix {
   implicit val doubleMatrixRing = new Ring[Matrix[Double]] {
+    def id = ???
+    def unit = ???
     def append(a: Matrix[Double], b: => Matrix[Double]): Matrix[Double] = {
       val n = a().length
       val na = new Array[Array[Double]](n)
